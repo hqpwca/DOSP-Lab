@@ -23,7 +23,7 @@ defmodule Calculator do
 		else
 			{counts, start_pos} = calc_loop(st + 1, k, remain_times - 1)
 			sum = sum2(st + k - 1) - sum2(st - 1)
-			t = Float.floor(:math.sqrt(sum))
+			t = Kernel.trunc(:math.sqrt(sum) + 1.0e-8)
 			if t * t == sum do
 				{counts + 1, [st] ++ start_pos}
 			else
@@ -33,8 +33,9 @@ defmodule Calculator do
 	end
 
 	def handle_cast({:calc, ref, st, k, times}, state) do
-		SubGenerator.request_problems(self())
-
+		with {:error, _} <- SubGenerator.request_problems(self()) do
+			exit(:normal)
+		end
 		Accumulator.deliver_counts(ref, calc_loop(st, k, times))
 		{:noreply, state}
 	end

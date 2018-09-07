@@ -21,6 +21,10 @@ defmodule SubGenerator do
 		#IO.inspect({pos, n, k, times})
 		sub_length = min(n - pos + 1, times)
 		new_pending = deliver_subproblem(pid, pending, pos, k, sub_length)
+		if sub_length == 0 && Enum.empty?(pending) do
+			IO.inspect("Finished")
+			exit(:normal)
+		end
 		{:noreply, {new_pending, pos + sub_length, n, k, times}}
 	end
 
@@ -37,7 +41,7 @@ defmodule SubGenerator do
 
 	defp deliver_subproblem(pid, pending, pos, k, sub_length) when sub_length == 0 do
 		if Enum.empty?(pending) do
-			pending # Nothing to do
+			pending
 		else
 			{ref, {last_pos, last_sub_length}} = Enum.random(pending)
 			Calculator.deliver_sub_problems(pid, ref, last_pos, k, last_sub_length)
