@@ -17,9 +17,9 @@ defmodule SquareCount do
   end
 
   def run_program() do
-    SubGenerator.start_link(1000000, 4 ,100)
+    SubGenerator.start_link(100000000, 24, 1000)
     Accumulator.Supervisor.start_link()
-    Calculator.Supervisor.start_link(1)
+    Calculator.Supervisor.start_link(2000)
     #Accumulator.get_result()
   end
 

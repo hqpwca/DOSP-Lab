@@ -23,6 +23,7 @@ defmodule SubGenerator do
 		new_pending = deliver_subproblem(pid, pending, pos, k, sub_length)
 		if sub_length == 0 && Enum.empty?(pending) do
 			IO.inspect("Finished")
+			IO.inspect(Accumulator.get_result())
 			exit(:normal)
 		end
 		{:noreply, {new_pending, pos + sub_length, n, k, times}}
