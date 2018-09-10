@@ -1,8 +1,8 @@
 defmodule SubGenerator do
 	use GenServer
 
-	def start_link(n, k, times) do
-		GenServer.start_link(__MODULE__, {n, k, times}, name: {:global, :wc_subgenerator})
+	def start_link(n, k, times, caller) do
+		GenServer.start_link(__MODULE__, {n, k, times, caller}, name: {:global, :wc_subgenerator})
 	end
 
 	def request_problems(pid) do
@@ -13,25 +13,24 @@ defmodule SubGenerator do
 		GenServer.cast({:global, :wc_subgenerator}, {:processed, ref})
 	end
 
-	def init({n, k, times}) do
-		{:ok, {Map.new, 1, n - k + 1, k, times}}
+	def init({n, k, times, caller}) do
+		{:ok, {Map.new, 1, n - k + 1, k, times, caller}}
 	end
 
-	def handle_cast({:request_problems, pid}, {pending, pos, n, k, times}) do
+	def handle_cast({:request_problems, pid}, {pending, pos, n, k, times, caller}) do
 		#IO.inspect({pos, n, k, times})
 		sub_length = min(n - pos + 1, times)
 		new_pending = deliver_subproblem(pid, pending, pos, k, sub_length)
 		if sub_length == 0 && Enum.empty?(pending) do
-			IO.inspect("Finished")
-			IO.inspect(Accumulator.get_result())
+			send caller, {:finished}
 			exit(:normal)
 		end
-		{:noreply, {new_pending, pos + sub_length, n, k, times}}
+		{:noreply, {new_pending, pos + sub_length, n, k, times, caller}}
 	end
 
-	def handle_cast({:processed, ref}, {pending, pos, n, k, times}) do
+	def handle_cast({:processed, ref}, {pending, pos, n, k, times, caller}) do
 		new_pending = Map.delete(pending, ref)
-		{:noreply, {new_pending, pos, n, k, times}}
+		{:noreply, {new_pending, pos, n, k, times, caller}}
 	end
 
 	defp deliver_subproblem(pid, pending, pos, k, sub_length) when sub_length > 0 do
