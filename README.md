@@ -2,6 +2,10 @@
 
 Github: https://github.com/hqpwca/DOSP-Lab.git
 
+## Group Info
+* Ke Chen 8431-0979
+* Bochen Li 4992-9405
+
 ## Requirements & Running Environments
 
 * Erlang/OTP 21 [erts-10.0.5] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1] [hipe] [dtrace]
@@ -37,7 +41,7 @@ Since the subproblem is O(n) with the n as the number of sums of squares it cont
 
 In order to achieve that, we make that each subproblem size equals the number of the subproblems, so the subproblem size should be `sqrt(N)`. (We actually use `sqrt(N)/2` because the constant in the running time of the subproblem generator and the accumulator is larger than the calculator)
 
-## Run the project
+## Instruction
 
 ### Command Line (Single Node):
 
