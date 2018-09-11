@@ -1,5 +1,7 @@
 # SquareCount
 
+Github: https://github.com/hqpwca/DOSP-Lab.git
+
 ## Requirements & Running Environments
 
 * Erlang/OTP 21 [erts-10.0.5] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:1] [hipe] [dtrace]
@@ -41,7 +43,7 @@ In this way, the abort of individual calculator actor will not affect the final 
 
 ### Running from iex (Single Node):
 * To start iex: `iex -S mix`
-* Start Subproblem Generatror: `SubGenerator.start_link([N],[k],[size])`
+* Start Subproblem Generatror: `SubGenerator.start_link([N],[k],[size], self())`
 
 > `N` is the maximum number of the calculation
 > 
@@ -54,6 +56,8 @@ In this way, the abort of individual calculator actor will not affect the final 
 
 > `calc_num` is the number of calculator actor created.
 
+* Get Result: `Accumulator.wait_signal`
+
 ### Running from iex (Distributed):
 * Copy the program to all the nodes.
 * Start iex with name and cookies: `iex --name [name]@[ip] --cookie [your cookie] -S mix`
@@ -63,4 +67,19 @@ In this way, the abort of individual calculator actor will not affect the final 
 
 ##Results
 
-###Result of 
+###Result of problem [1000000, 4]
+![](s1.png)
+
+Since I have used the formula to calculate, the problem is to small to get all the 4 cores running.
+
+###Result of problem [1000000, 24]
+![](s2.png)
+
+Showing that the program can get correct result.
+
+###Result of problem [100000000, 24]
+![](s3.png)
+
+Showing that the program can use all the 4 cores to calculate the problem. (The CPU Usage is over 300%)
+
+###Result of problem [100000000, 20]  -(2 Nodes)

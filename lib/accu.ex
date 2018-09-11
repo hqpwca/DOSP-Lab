@@ -32,6 +32,12 @@ defmodule Accumulator do
 	def handle_call({:get_results}, _, {ans, all_pos, processed_subproblems}) do
 		{:reply, {ans, all_pos}, {ans, all_pos, processed_subproblems}}
 	end
+
+	def wait_signal do
+		receive do
+			{:finished} -> IO.inspect Accumulator.get_result()
+		end
+	end
 end
 
 defmodule Accumulator.Supervisor do
