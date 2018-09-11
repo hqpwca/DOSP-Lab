@@ -22,9 +22,9 @@ defmodule SquareCount do
 	end
 
 	def run_program(n, k) do
-		SubGenerator.start_link(n, k, 500, self())
+		SubGenerator.start_link(n, k, Kernel.trunc(:math.sqrt(n)/2), self())
 		Accumulator.Supervisor.start_link()
-		Calculator.Supervisor.start_link(4)
+		Calculator.Supervisor.start_link(16)
 		receive do
 			{:finished} -> IO.inspect Accumulator.get_result()
 		end
