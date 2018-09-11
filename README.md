@@ -31,12 +31,18 @@ First, the calculator will send a message, ask the subproblem generator for a ne
 
 In this way, the abort of individual calculator actor will not affect the final result of the problem.
 
+###Subproblem size determine
+
+Since the subproblem is O(n) with the n as the number of sums of squares it contains, so that we need to make the subproblem generator and accumulator to do  same load of work as the calculator.
+
+In order to achieve that, we make that each subproblem size equals the number of the subproblems, so the subproblem size should be `sqrt(N)`. (We actually use `sqrt(N)/2` because the constant in the running time of the subproblem generator and the accumulator is larger than the calculator)
+
 ## Run the project
 
 ### Command Line (Single Node):
 
 `mix run scount.exs [N] [k]`
-> `N` is the maximum number of the calculation, and `k` is the length of each sum of squares.(subproblem size = sqrt(N)/2, num of calculator actors = 16)
+> `N` is the maximum number of the calculation, and `k` is the length of each sum of squares.(subproblem size = `sqrt(N)/2`, num of calculator actors = `16`)
 
 `time mix run scount.exs [N] [k]`
 > Get the running time of the program.
@@ -82,4 +88,15 @@ Showing that the program can get correct result.
 
 Showing that the program can use all the 4 cores to calculate the problem. (The CPU Usage is over 300%)
 
-###Result of problem [100000000, 20]  -(2 Nodes)
+###Result of problem [100000, 24]  -(2 Nodes)
+![](s4.png)
+![](s5.png)
+
+Since I used my vps for the calculation node, the Internet connection between the 2 nodes is too slow to solve the large problems, so I just tried small problems in the 2 nodes. However, the distributed version should be able to calculate large problems when the connection is better.
+
+###The largest problem solved [1000000000, 24]
+![](s6.png)
+
+I tried to solve the problem while I am writing the readme, so the CPU usage is not so high. I haven't tried a so large problem since it has no meaning.
+
+
